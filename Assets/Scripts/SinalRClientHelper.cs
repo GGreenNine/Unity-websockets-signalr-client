@@ -42,8 +42,11 @@ public class SinalRClientHelper : Singleton<SinalRClientHelper>
             /*
              * Connection to game hub updateModels
              */
-            Subscription gamehubSubscription = _gameHubProxy.Subscribe("GameBroadcaster_UpdateGameModels");
-            gamehubSubscription.Received += UserUpdateSceneState;
+            Subscription sceneCreateData = _gameHubProxy.Subscribe("GameBroadcaster_CreateModel");
+            sceneCreateData.Received += SceneCreateData;
+            
+            Subscription sceneDeleteData = _gameHubProxy.Subscribe("GameBroadcaster_GameBroadcaster_DeleteModel");
+            sceneDeleteData.Received += SceneDeleteData;
             /*
              *  Connection to registrate status
              */
@@ -183,4 +186,52 @@ public class SinalRClientHelper : Singleton<SinalRClientHelper>
         _hubConnection.Error -= hubConnection_Error;
         _hubConnection.Stop();
     }
+
+    private void SceneCreateData(IList<JToken> obj)
+    {
+        SyncObjectModel modelToCreate = JsonConvert.DeserializeObject<SyncObjectModel>(obj.First().ToString());
+        if (modelToCreate == null)
+        {
+            UINotifications.Instance.ShowDefaultNotification("Creating new object failed");
+            return;
+        }
+        ClientFunctional.Instance.CreateModelOther(modelToCreate);
+    }
+    
+    private void SceneDeleteData(IList<JToken> obj)
+    {
+        SyncObjectModel modelToCreate = JsonConvert.DeserializeObject<SyncObjectModel>(obj.First().ToString());
+        if (modelToCreate == null)
+        {
+            UINotifications.Instance.ShowDefaultNotification("Deleting object failed");
+            return;
+        }
+
+        NetWorkingTransform matchModel;
+        ObjectsStateManager.Instance.modelsLoadedFromServerDictionary.TryGetValue(modelToCreate.ModelId,
+            out matchModel);
+        if(matchModel!=null)
+            matchModel.DisableMe(out matchModel);
+    }
+    
+    
+    
+    /// <summary>
+         /// Sending data packages to the server
+         /// </summary>
+         /// <returns></returns>
+//         private IEnumerator TransformPackageSender()
+//         {
+//             yield return new WaitForSeconds(0.02f);
+//             foreach (var package in _queueToSend)
+//             {
+//                 Debug.Log(package.Length * sizeof(char) + "- Отправлен пакет");
+//                 webSocket.Send(package);
+//             }
+//     
+//             _queueToSend.Clear();
+//             StartCoroutine(TransformPackageSender());
+//         }
+    
+    
 }

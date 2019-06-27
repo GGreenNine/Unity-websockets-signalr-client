@@ -13,7 +13,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{1A149E23-1BD0-FA59-6AB0-AF7CBD91805D}</ProjectGuid>
+    <ProjectGuid>{7AA8D620-6E74-27A0-69AB-53FC6887374F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
@@ -75,15 +75,18 @@
     <Compile Include="Assets\Demigiant\DOTween\Modules\DOTweenModuleUtils.cs" />
     <Compile Include="Assets\Scripts\ClientFunctional.cs" />
     <Compile Include="Assets\Scripts\ClientUIHolder.cs" />
+    <Compile Include="Assets\Scripts\DefaultNetWorkObject.cs" />
     <Compile Include="Assets\Scripts\GameServerFunctional.cs" />
-    <Compile Include="Assets\Scripts\INetWorkingTransform.cs" />
+    <Compile Include="Assets\Scripts\MovingNetworkTransform.cs" />
     <Compile Include="Assets\Scripts\NetworkManager.cs" />
+    <Compile Include="Assets\Scripts\ObjectsStateManager.cs" />
     <Compile Include="Assets\Scripts\SinalRClientHelper.cs" />
     <Compile Include="Assets\Scripts\Singleton.cs" />
     <Compile Include="Assets\Scripts\UIManager.cs" />
     <Compile Include="Assets\Scripts\UINotifications.cs" />
     <Compile Include="Assets\Scripts\UnityMainThreadDispatcher.cs" />
     <Compile Include="Assets\Scripts\UserManager.cs" />
+    <Compile Include="Assets\Scripts\VectorConverter.cs" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Surface-Mobile.shader" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Leading Characters.txt" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro_Properties.cginc" />
@@ -102,20 +105,14 @@
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Mobile.shader" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_Sprite.shader" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Surface.shader" />
-    <Reference Include="Unity.TextMeshPro.Editor">
-      <HintPath>D:/Test projects/NetWork test 2/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.PackageManagerUI.Editor">
-      <HintPath>D:/Test projects/NetWork test 2/Library/ScriptAssemblies/Unity.PackageManagerUI.Editor.dll</HintPath>
+      <HintPath>D:/Test projects/NetWork test 2/Unity websockets signalr client/Library/ScriptAssemblies/Unity.PackageManagerUI.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.CollabProxy.Editor">
-      <HintPath>D:/Test projects/NetWork test 2/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.TextMeshPro">
-      <HintPath>D:/Test projects/NetWork test 2/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
+      <HintPath>D:/Test projects/NetWork test 2/Unity websockets signalr client/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Analytics.DataPrivacy">
-      <HintPath>D:/Test projects/NetWork test 2/Library/ScriptAssemblies/Unity.Analytics.DataPrivacy.dll</HintPath>
+      <HintPath>D:/Test projects/NetWork test 2/Unity websockets signalr client/Library/ScriptAssemblies/Unity.Analytics.DataPrivacy.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AIModule">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2018.3.0f2/Editor/Data/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>
@@ -319,25 +316,31 @@
       <HintPath>C:/Program Files/Unity/Hub/Editor/2018.3.0f2/Editor/Data/UnityExtensions/Unity/UnitySpatialTracking/RuntimeEditor/UnityEngine.SpatialTracking.dll</HintPath>
     </Reference>
     <Reference Include="DOTween">
-      <HintPath>D:/Test projects/NetWork test 2/Assets/Demigiant/DOTween/DOTween.dll</HintPath>
+      <HintPath>D:/Test projects/NetWork test 2/Unity websockets signalr client/Assets/Demigiant/DOTween/DOTween.dll</HintPath>
     </Reference>
     <Reference Include="ModelsLibrary">
-      <HintPath>D:/Test projects/NetWork test 2/Assets/Plugins/ModelsLibrary.dll</HintPath>
+      <HintPath>D:/Test projects/NetWork test 2/Unity websockets signalr client/Assets/Plugins/ModelsLibrary.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AspNet.SignalR.Client">
-      <HintPath>D:/Test projects/NetWork test 2/Assets/Plugins/Microsoft.AspNet.SignalR.Client.2.4.0-preview1-20180920-03/lib/net40/Microsoft.AspNet.SignalR.Client.dll</HintPath>
+      <HintPath>D:/Test projects/NetWork test 2/Unity websockets signalr client/Assets/Plugins/Microsoft.AspNet.SignalR.Client.2.4.0-preview1-20180920-03/lib/net40/Microsoft.AspNet.SignalR.Client.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>D:/Test projects/NetWork test 2/Assets/Plugins/Newtonsoft.Json.6.0.4/lib/net40/Newtonsoft.Json.dll</HintPath>
+      <HintPath>D:/Test projects/NetWork test 2/Unity websockets signalr client/Assets/Plugins/Newtonsoft.Json.6.0.4/lib/net40/Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.Advertisements">
+      <HintPath>D:/Test projects/NetWork test 2/Unity websockets signalr client/Library/PackageCache/com.unity.ads@2.3.1/Runtime/UnityEngine.Advertisements.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.Advertisements.Editor">
+      <HintPath>D:/Test projects/NetWork test 2/Unity websockets signalr client/Library/PackageCache/com.unity.ads@2.3.1/Runtime/UnityEngine.Advertisements.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Analytics.Editor">
-      <HintPath>D:/Test projects/NetWork test 2/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.Editor.dll</HintPath>
+      <HintPath>D:/Test projects/NetWork test 2/Unity websockets signalr client/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Analytics.StandardEvents">
-      <HintPath>D:/Test projects/NetWork test 2/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.StandardEvents.dll</HintPath>
+      <HintPath>D:/Test projects/NetWork test 2/Unity websockets signalr client/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.StandardEvents.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Analytics.Tracker">
-      <HintPath>D:/Test projects/NetWork test 2/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.Tracker.dll</HintPath>
+      <HintPath>D:/Test projects/NetWork test 2/Unity websockets signalr client/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.Tracker.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2018.3.0f2/Editor/Data/MonoBleedingEdge/lib/mono/4.7.1-api/mscorlib.dll</HintPath>
@@ -696,7 +699,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Assembly-CSharp-firstpass.csproj">
-      <Project>{EA199BCB-CBFC-A6E0-5A92-6731FE1B28EB}</Project>
+      <Project>{D2419BF2-7AFD-FE56-0CC2-CA6827689772}</Project>
       <Name>Assembly-CSharp-firstpass</Name>
     </ProjectReference>
   </ItemGroup>

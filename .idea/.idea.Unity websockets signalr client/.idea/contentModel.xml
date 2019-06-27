@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelStore">
+    <e p="C:\Users\vr\.Rider2018.3\config\consoles\ide" t="IncludeRecursive" />
+    <e p="C:\Users\vr\.Rider2018.3\system\extResources" t="IncludeRecursive" />
+    <e p="C:\Users\vr\.Rider2018.3\system\resharper-host\local\Transient\ReSharperHost\v183\SolutionCaches\_Unity websockets signalr client.-805691936.00" t="ExcludeRecursive" />
+    <e p="D:\Test projects\NetWork test 2\Unity websockets signalr client" t="IncludeRecursive">
+      <e p="Assembly-CSharp-firstpass.csproj" t="IncludeRecursive" />
+      <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
+      <e p="Assets" t="Include">
+        <e p="Demigiant" t="Include">
+          <e p="DOTween" t="Include">
+            <e p="Modules" t="Include">
+              <e p="DOTweenModuleAudio.cs" t="Include" />
+              <e p="DOTweenModulePhysics.cs" t="Include" />
+              <e p="DOTweenModulePhysics2D.cs" t="Include" />
+              <e p="DOTweenModuleSprite.cs" t="Include" />
+              <e p="DOTweenModuleUI.cs" t="Include" />
+              <e p="DOTweenModuleUnityVersion.cs" t="Include" />
+              <e p="DOTweenModuleUtils.cs" t="Include" />
+            </e>
+            <e p="readme.txt" t="Include" />
+          </e>
+        </e>
+        <e p="Plugins" t="Include">
+          <e p="Microsoft.AspNet.SignalR.Client.2.4.0-preview1-20180920-03" t="Include">
+            <e p="lib" t="Include">
+              <e p="net40" t="Include">
+                <e p="Microsoft.AspNet.SignalR.Client.xml" t="Include" />
+              </e>
+            </e>
+          </e>
+          <e p="Newtonsoft.Json.6.0.4" t="Include">
+            <e p="lib" t="Include">
+              <e p="net40" t="Include">
+                <e p="Newtonsoft.Json.xml" t="Include" />
+              </e>
+            </e>
+          </e>
+          <e p="Pixelplacement" t="Include">
+            <e p="iTween" t="Include">
+              <e p="iTween.cs" t="Include" />
+              <e p="ReadMe!" t="Include">
+                <e p="ReadMe!.txt" t="Include" />
+              </e>
+              <e p="Sample" t="Include">
+                <e p="MoveSample.cs" t="Include" />
+                <e p="RotateSample.cs" t="Include" />
+                <e p="SampleInfo.cs" t="Include" />
+              </e>
+            </e>
+          </e>
+        </e>
+        <e p="Scripts" t="Include">
+          <e p="ClientFunctional.cs" t="Include" />
+          <e p="ClientUIHolder.cs" t="Include" />
+          <e p="DefaultNetWorkObject.cs" t="Include" />
+          <e p="GameServerFunctional.cs" t="Include" />
+          <e p="MovingNetworkTransform.cs" t="Include" />
+          <e p="NetworkManager.cs" t="Include" />
+          <e p="ObjectsStateManager.cs" t="Include" />
+          <e p="SinalRClientHelper.cs" t="Include" />
+          <e p="Singleton.cs" t="Include" />
+          <e p="UIManager.cs" t="Include" />
+          <e p="UINotifications.cs" t="Include" />
+          <e p="UnityMainThreadDispatcher.cs" t="Include" />
+          <e p="UserManager.cs" t="Include" />
+          <e p="VectorConverter.cs" t="Include" />
+        </e>
+        <e p="TextMesh Pro" t="Include">
+          <e p="Resources" t="Include">
+            <e p="LineBreaking Following Characters.txt" t="Include" />
+            <e p="LineBreaking Leading Characters.txt" t="Include" />
+            <e p="Shaders" t="Include">
+              <e p="TMP_Bitmap-Custom-Atlas.shader" t="Include" />
+              <e p="TMP_Bitmap-Mobile.shader" t="Include" />
+              <e p="TMP_Bitmap.shader" t="Include" />
+              <e p="TMP_SDF Overlay.shader" t="Include" />
+              <e p="TMP_SDF-Mobile Masking.shader" t="Include" />
+              <e p="TMP_SDF-Mobile Overlay.shader" t="Include" />
+              <e p="TMP_SDF-Mobile.shader" t="Include" />
+              <e p="TMP_SDF-Surface-Mobile.shader" t="Include" />
+              <e p="TMP_SDF-Surface.shader" t="Include" />
+              <e p="TMP_SDF.shader" t="Include" />
+              <e p="TMP_Sprite.shader" t="Include" />
+              <e p="TMPro.cginc" t="Include" />
+              <e p="TMPro_Properties.cginc" t="Include" />
+              <e p="TMPro_Surface.cginc" t="Include" />
+            </e>
+          </e>
+          <e p="Sprites" t="Include">
+            <e p="EmojiOne Attribution.txt" t="Include" />
+          </e>
+        </e>
+      </e>
+      <e p="Library" t="ExcludeRecursive" />
+      <e p="obj" t="ExcludeRecursive" />
+      <e p="packages" t="ExcludeRecursive" />
+      <e p="Temp" t="ExcludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+      </e>
+      <e p="Unity websockets signalr client.sln" t="IncludeFlat" />
+    </e>
+  </component>
+</project>
