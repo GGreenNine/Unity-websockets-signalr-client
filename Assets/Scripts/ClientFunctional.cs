@@ -10,22 +10,18 @@ using Random = System.Random;
 
 public class ClientFunctional : Singleton<ClientFunctional>
 {
-//    public void CreateSimpleCube()
-//    {
-//        var randomPlace = new Vector3(UnityEngine.Random.Range(0f, 10f), UnityEngine.Random.Range(0f, 10f),
-//            UnityEngine.Random.Range(0f, 10f));
-//        var randomRotation = new Quaternion(UnityEngine.Random.Range(0f, 10f), UnityEngine.Random.Range(0f, 10f),
-//            UnityEngine.Random.Range(0f, 10f), UnityEngine.Random.Range(0f, 10f));
-//        CreateModel(randomPlace, randomRotation, "SimpleCube");
-//    }
+    public void CreateSimpleCube()
+    {
+        var randomPlace = new Vector3(UnityEngine.Random.Range(0f, 10f), UnityEngine.Random.Range(0f, 10f),
+            UnityEngine.Random.Range(0f, 10f));
+        var randomRotation = new Vector3(UnityEngine.Random.Range(0f, 10f), UnityEngine.Random.Range(0f, 10f),
+            UnityEngine.Random.Range(0f, 10f));
+        CreateModel(randomPlace, randomRotation, "PlayerPrefab");
+    }
 
     public void GeneratePlayerModel()
     {
         CreateModel(Vector3.zero, Vector3.one, "PlayerPrefab");
-    }
-
-    public void GenerateOtherPlayerModel()
-    {
     }
 
     public void CreateModel(Vector3 position, Vector3 rotation, string prefabName)
@@ -35,36 +31,37 @@ public class ClientFunctional : Singleton<ClientFunctional>
         {
             PrefabName = prefabName,
             ModelId = Guid.NewGuid().ToString(),
-            User = UserManager.CurrentUser,
+            //PlayerId = UserManager.CurrentUser.PlayerId,
+            //RoomModelId = UserManager.CurrentUser.RoomModelId
         };
         
         VectorConverter g = new VectorConverter(false, true, false);
         
         var pos = JObject.Parse(JsonConvert.SerializeObject(position, g));
         var rot = JObject.Parse(JsonConvert.SerializeObject(rotation, g));
+
+        myModel.ModelPosition = new JObject();
+        myModel.ModelRotation = new JObject();
+
+        myModel.ModelPosition.Add(new JProperty("Position", pos));
+        myModel.ModelRotation.Add(new JProperty("Rotation", rot));
         
-        myModel.ModelPosition = new JObject()
-        {
-            "position",
-            pos
-        };
-        myModel.ModelRotation = new JObject()
-        {
-            "rotation",
-            rot
-        };
-        SinalRClientHelper._gameHubProxy.Invoke("CreateModel", myModel);
+        SinalRClientHelper._gameHubProxy.Invoke("CreateModel",myModel, UserManager.CurrentUser);
     }
 
     public void CreateModelOther(SyncObjectModel inModel)
     {
-        var position = JsonConvert.DeserializeObject<Vector3>(inModel.ModelPosition.First.ToString());
-        var rotation = JsonConvert.DeserializeObject<Vector3>(inModel.ModelRotation.First.ToString());
+        VectorConverter g = new VectorConverter(true, true, true);
+
+        var position = JsonConvert.DeserializeObject<Vector3>(inModel.ModelPosition.First.First.ToString(), g);
+        g = new VectorConverter(true, true, true);
+        var rotation = JsonConvert.DeserializeObject<Vector3>(inModel.ModelRotation.First.First.ToString(), g);
         UnityMainThreadDispatcher.Instance().Enqueue(delegate
         {
             var otherModelPrefab = Instantiate(Resources.Load(inModel.PrefabName), position,
                 new Quaternion(rotation.x, rotation.y, rotation.z, 1)) as GameObject;
             var netWorkingTransform = otherModelPrefab.GetComponent<NetWorkingTransform>();
+            netWorkingTransform.syncObjectModel = inModel;
             ObjectsStateManager.Instance.modelsLoadedFromServerDictionary.TryAdd(inModel.ModelId, netWorkingTransform);
         });
     }

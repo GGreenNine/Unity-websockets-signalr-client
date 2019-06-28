@@ -13,6 +13,7 @@ public abstract class MovingNetworkTransform : NetWorkingTransform
 
 public abstract class NetWorkingTransform : MonoBehaviour
 {
+    public SyncObjectModel syncObjectModel;
     public string CreatorAuthority;
     public string ModelAuthority;
 

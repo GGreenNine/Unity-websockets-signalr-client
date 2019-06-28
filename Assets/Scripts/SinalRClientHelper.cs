@@ -67,7 +67,7 @@ public class SinalRClientHelper : Singleton<SinalRClientHelper>
              */
             Subscription userLeavedRoom = _userHubProxy.Subscribe("UserLeavedRoom");
             userLeavedRoom.Received += UserLeavedRoomData;
-
+            
             Debug.Log(" _hubConnection.Start();");
         }
 
@@ -196,6 +196,8 @@ public class SinalRClientHelper : Singleton<SinalRClientHelper>
             return;
         }
         ClientFunctional.Instance.CreateModelOther(modelToCreate);
+        UINotifications.Instance.ShowDefaultNotification($"Creating new object {modelToCreate.PrefabName}");
+
     }
     
     private void SceneDeleteData(IList<JToken> obj)
@@ -206,7 +208,6 @@ public class SinalRClientHelper : Singleton<SinalRClientHelper>
             UINotifications.Instance.ShowDefaultNotification("Deleting object failed");
             return;
         }
-
         NetWorkingTransform matchModel;
         ObjectsStateManager.Instance.modelsLoadedFromServerDictionary.TryGetValue(modelToCreate.ModelId,
             out matchModel);
