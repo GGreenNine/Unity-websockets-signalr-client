@@ -82,6 +82,11 @@ public class ClientFunctional : Singleton<ClientFunctional>, IUserInterface
         });
     }
 
+    private void Start()
+    {
+        Enable();
+    }
+
     public void UpdateScene()
     {
         SinalRClientHelper._gameHubProxy.Invoke("UpdateScene", UserManager.CurrentUser);
@@ -97,7 +102,7 @@ public class ClientFunctional : Singleton<ClientFunctional>, IUserInterface
         throw new NotImplementedException();
     }
 
-    public void Update()
+    public void UpdateUser()
     {
         throw new NotImplementedException();
     }

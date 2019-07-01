@@ -17,14 +17,20 @@ public class SinalRClientHelper : Singleton<SinalRClientHelper>
 
     public delegate void ConnectedToRoom();
 
-    public event ConnectedToRoom IsConnectedToRoom;
-    public event ConnectedToRoom IsDisconnectedFromRoom;
+    public event ConnectedToRoom IsConnectedToRoom = delegate { };
+    public event ConnectedToRoom IsDisconnectedFromRoom = delegate { };
 
     private HubConnection _hubConnection = null;
     public static IHubProxy _gameHubProxy;
     public static IHubProxy _userHubProxy;
     string _result;
 
+    public void ConnectToRoom()
+    {
+        UINotifications.Instance.ShowDefaultNotification($"ConnectedToRoom");
+        IsConnectedToRoom?.Invoke();
+    }
+    
     private void Start()
     {
         ConnectToHub();
@@ -74,7 +80,7 @@ public class SinalRClientHelper : Singleton<SinalRClientHelper>
             /*
              * 
              */
-            Subscription updateScene = _gameHubProxy.Subscribe("UpdateScene");
+            Subscription updateScene = _gameHubProxy.Subscribe("UpdateSceneFor");
             updateScene.Received += UpdateSceneData;
             
             Debug.Log(" _hubConnection.Start();");
@@ -88,10 +94,10 @@ public class SinalRClientHelper : Singleton<SinalRClientHelper>
 
     private void UpdateSceneData(IList<JToken> obj)
     {
-        var sceneObjects = JsonConvert.DeserializeObject<SyncObjectModel[]>(obj.First().ToString());
+        var sceneObjects = JArray.Parse(obj.First().ToString());
         foreach (var model in sceneObjects)
         {
-            ClientFunctional.Instance.CreateModelOther(model);
+            var modelObject = JsonConvert.DeserializeObject<SyncObjectModel>(model.ToString());
         }
     }
 
@@ -153,7 +159,7 @@ public class SinalRClientHelper : Singleton<SinalRClientHelper>
         if (UserManager.CurrentUser.UserName == user.UserName)
         {
             UserManager.CurrentUser = user;
-            IsConnectedToRoom();
+            ConnectToRoom();
         }
         UINotifications.Instance.ShowDefaultNotification($"User is join the room : {user.UserName}");
     }

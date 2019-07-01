@@ -6,7 +6,7 @@ public interface IUserInterface
 {
     void Enable();
     void Disable();
-    void Update();
+    void UpdateUser();
     void ConnectToRoom();
     void DisconnectFromRoom();
 }
