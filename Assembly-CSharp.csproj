@@ -77,6 +77,7 @@
     <Compile Include="Assets\Scripts\ClientUIHolder.cs" />
     <Compile Include="Assets\Scripts\DefaultNetWorkObject.cs" />
     <Compile Include="Assets\Scripts\GameServerFunctional.cs" />
+    <Compile Include="Assets\Scripts\IUserInterface.cs" />
     <Compile Include="Assets\Scripts\MovingNetworkTransform.cs" />
     <Compile Include="Assets\Scripts\NetworkManager.cs" />
     <Compile Include="Assets\Scripts\ObjectsStateManager.cs" />

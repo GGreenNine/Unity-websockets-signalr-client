@@ -44,15 +44,4 @@ public class UserManager : Singleton<UserManager>
         };
         SinalRClientHelper._userHubProxy.Invoke("UserAuthorization", user);
     }
-
-    public void JoinRoom()
-    {
-        SinalRClientHelper._userHubProxy.Invoke("JoinRoom", CurrentUser);
-    }
-
-    public void LeaveRoom()
-    { 
-        if(UserManager.CurrentUser.RoomModelId==null) return;
-        SinalRClientHelper._userHubProxy.Invoke("LeaveRoom", CurrentUser);
-    }
 }

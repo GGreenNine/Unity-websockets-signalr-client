@@ -15,6 +15,10 @@ public class SinalRClientHelper : Singleton<SinalRClientHelper>
 {
     public string signalRUrl = "84.201.161.171/MyNetworkApp/";
 
+    public delegate void ConnectedToRoom();
+
+    public event ConnectedToRoom IsConnectedToRoom;
+    public event ConnectedToRoom IsDisconnectedFromRoom;
 
     private HubConnection _hubConnection = null;
     public static IHubProxy _gameHubProxy;
@@ -60,13 +64,18 @@ public class SinalRClientHelper : Singleton<SinalRClientHelper>
             /*
              * Get user joined the room data
              */
-            Subscription userHubJoiningRoom = _userHubProxy.Subscribe("UserJoinRoomStatus");
+            Subscription userHubJoiningRoom = _gameHubProxy.Subscribe("UserJoinRoomStatus");
             userHubJoiningRoom.Received += UserJoinedRoomData;
             /*
              * Get user leaved the room data
              */
-            Subscription userLeavedRoom = _userHubProxy.Subscribe("UserLeavedRoom");
+            Subscription userLeavedRoom = _gameHubProxy.Subscribe("UserLeavedRoom");
             userLeavedRoom.Received += UserLeavedRoomData;
+            /*
+             * 
+             */
+            Subscription updateScene = _gameHubProxy.Subscribe("UpdateScene");
+            updateScene.Received += UpdateSceneData;
             
             Debug.Log(" _hubConnection.Start();");
         }
@@ -75,6 +84,15 @@ public class SinalRClientHelper : Singleton<SinalRClientHelper>
         _hubConnection.Start().Wait();
         if (_hubConnection.State == ConnectionState.Connected)
             Debug.Log("connected");
+    }
+
+    private void UpdateSceneData(IList<JToken> obj)
+    {
+        var sceneObjects = JsonConvert.DeserializeObject<SyncObjectModel[]>(obj.First().ToString());
+        foreach (var model in sceneObjects)
+        {
+            ClientFunctional.Instance.CreateModelOther(model);
+        }
     }
 
     private void HubConnectionOnStateChanged(StateChange obj)
@@ -102,6 +120,7 @@ public class SinalRClientHelper : Singleton<SinalRClientHelper>
         foreach (var model in obj)
         {
             Debug.Log(model);
+            
         }
     }
 
@@ -132,7 +151,10 @@ public class SinalRClientHelper : Singleton<SinalRClientHelper>
         if (user == null)
             return;
         if (UserManager.CurrentUser.UserName == user.UserName)
+        {
             UserManager.CurrentUser = user;
+            IsConnectedToRoom();
+        }
         UINotifications.Instance.ShowDefaultNotification($"User is join the room : {user.UserName}");
     }
     /// <summary>
@@ -145,7 +167,10 @@ public class SinalRClientHelper : Singleton<SinalRClientHelper>
         if (user == null)
             return;
         if (UserManager.CurrentUser.UserName == user.UserName)
+        {
             UserManager.CurrentUser = user;
+            IsDisconnectedFromRoom();
+        }
         UINotifications.Instance.ShowDefaultNotification($"User has leaved the room : {user.UserName}");
     }
 
@@ -190,11 +215,11 @@ public class SinalRClientHelper : Singleton<SinalRClientHelper>
     private void SceneCreateData(IList<JToken> obj)
     {
         SyncObjectModel modelToCreate = JsonConvert.DeserializeObject<SyncObjectModel>(obj.First().ToString());
-        if (modelToCreate == null)
-        {
-            UINotifications.Instance.ShowDefaultNotification("Creating new object failed");
+        var myID = UserManager.CurrentUser.connectionId;
+        
+        if(myID == modelToCreate.UserModel.connectionId)
             return;
-        }
+        
         ClientFunctional.Instance.CreateModelOther(modelToCreate);
         UINotifications.Instance.ShowDefaultNotification($"Creating new object {modelToCreate.PrefabName}");
 
@@ -214,25 +239,5 @@ public class SinalRClientHelper : Singleton<SinalRClientHelper>
         if(matchModel!=null)
             matchModel.DisableMe(out matchModel);
     }
-    
-    
-    
-    /// <summary>
-         /// Sending data packages to the server
-         /// </summary>
-         /// <returns></returns>
-//         private IEnumerator TransformPackageSender()
-//         {
-//             yield return new WaitForSeconds(0.02f);
-//             foreach (var package in _queueToSend)
-//             {
-//                 Debug.Log(package.Length * sizeof(char) + "- Отправлен пакет");
-//                 webSocket.Send(package);
-//             }
-//     
-//             _queueToSend.Clear();
-//             StartCoroutine(TransformPackageSender());
-//         }
-    
     
 }

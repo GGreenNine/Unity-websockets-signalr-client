@@ -2499,7 +2499,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1788903112}
+      - m_Target: {fileID: 187270977}
         m_MethodName: JoinRoom
         m_Mode: 1
         m_Arguments:
@@ -2962,7 +2962,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1788903112}
+      - m_Target: {fileID: 187270977}
         m_MethodName: LeaveRoom
         m_Mode: 1
         m_Arguments:

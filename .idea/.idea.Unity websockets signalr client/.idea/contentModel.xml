@@ -56,6 +56,7 @@
           <e p="ClientUIHolder.cs" t="Include" />
           <e p="DefaultNetWorkObject.cs" t="Include" />
           <e p="GameServerFunctional.cs" t="Include" />
+          <e p="IUserInterface.cs" t="Include" />
           <e p="MovingNetworkTransform.cs" t="Include" />
           <e p="NetworkManager.cs" t="Include" />
           <e p="ObjectsStateManager.cs" t="Include" />

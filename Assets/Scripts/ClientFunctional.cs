@@ -8,7 +8,7 @@ using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 using Random = System.Random;
 
-public class ClientFunctional : Singleton<ClientFunctional>
+public class ClientFunctional : Singleton<ClientFunctional>, IUserInterface
 {
     public void CreateSimpleCube()
     {
@@ -26,7 +26,8 @@ public class ClientFunctional : Singleton<ClientFunctional>
 
     public void CreateModel(Vector3 position, Vector3 rotation, string prefabName)
     {
-        var myModelPrefab = Instantiate(Resources.Load(prefabName), position, new Quaternion(rotation.x,rotation.y,rotation.z,1));
+        var myModelPrefab = Instantiate(Resources.Load(prefabName), position,
+            new Quaternion(rotation.x, rotation.y, rotation.z, 1));
         var myModel = new SyncObjectModel
         {
             PrefabName = prefabName,
@@ -34,9 +35,9 @@ public class ClientFunctional : Singleton<ClientFunctional>
             //PlayerId = UserManager.CurrentUser.PlayerId,
             //RoomModelId = UserManager.CurrentUser.RoomModelId
         };
-        
+
         VectorConverter g = new VectorConverter(false, true, false);
-        
+
         var pos = JObject.Parse(JsonConvert.SerializeObject(position, g));
         var rot = JObject.Parse(JsonConvert.SerializeObject(rotation, g));
 
@@ -45,17 +46,32 @@ public class ClientFunctional : Singleton<ClientFunctional>
 
         myModel.ModelPosition.Add(new JProperty("Position", pos));
         myModel.ModelRotation.Add(new JProperty("Rotation", rot));
-        
-        SinalRClientHelper._gameHubProxy.Invoke("CreateModel",myModel, UserManager.CurrentUser);
+
+        SinalRClientHelper._gameHubProxy.Invoke("CreateModel", myModel, UserManager.CurrentUser);
     }
 
+    /// <summary>
+    /// Создание чужой модели
+    /// </summary>
+    /// <param name="inModel"></param>
     public void CreateModelOther(SyncObjectModel inModel)
     {
+        /*
+         * Проверяем, есть ли данная модель на сцене
+         * Если есть, не создаем повторную и выходим из тела метода
+         */
+        if (ObjectsStateManager.Instance.modelsLoadedFromServerDictionary.ContainsKey(inModel.ModelId)) return;
+
         VectorConverter g = new VectorConverter(true, true, true);
 
         var position = JsonConvert.DeserializeObject<Vector3>(inModel.ModelPosition.First.First.ToString(), g);
         g = new VectorConverter(true, true, true);
         var rotation = JsonConvert.DeserializeObject<Vector3>(inModel.ModelRotation.First.First.ToString(), g);
+
+        /*
+         * Модель может создаваться только в основном потоке,
+         * Поэтому диспатчим ее и засовываем в основной поток.
+         */
         UnityMainThreadDispatcher.Instance().Enqueue(delegate
         {
             var otherModelPrefab = Instantiate(Resources.Load(inModel.PrefabName), position,
@@ -64,5 +80,36 @@ public class ClientFunctional : Singleton<ClientFunctional>
             netWorkingTransform.syncObjectModel = inModel;
             ObjectsStateManager.Instance.modelsLoadedFromServerDictionary.TryAdd(inModel.ModelId, netWorkingTransform);
         });
+    }
+
+    public void UpdateScene()
+    {
+        SinalRClientHelper._gameHubProxy.Invoke("UpdateScene", UserManager.CurrentUser);
+    }
+
+    public void Enable()
+    {
+        SinalRClientHelper.Instance.IsConnectedToRoom += UpdateScene;
+    }
+
+    public void Disable()
+    {
+        throw new NotImplementedException();
+    }
+
+    public void Update()
+    {
+        throw new NotImplementedException();
+    }
+
+    public void ConnectToRoom()
+    {
+        SinalRClientHelper._gameHubProxy.Invoke("JoinRoom", UserManager.CurrentUser);
+    }
+
+    public void DisconnectFromRoom()
+    {
+        if (UserManager.CurrentUser.RoomModelId == null) return;
+        SinalRClientHelper._gameHubProxy.Invoke("LeaveRoom", UserManager.CurrentUser);
     }
 }
