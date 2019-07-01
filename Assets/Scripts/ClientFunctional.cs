@@ -38,14 +38,8 @@ public class ClientFunctional : Singleton<ClientFunctional>, IUserInterface
 
         VectorConverter g = new VectorConverter(false, true, false);
 
-        var pos = JObject.Parse(JsonConvert.SerializeObject(position, g));
-        var rot = JObject.Parse(JsonConvert.SerializeObject(rotation, g));
-
-        myModel.ModelPosition = new JObject();
-        myModel.ModelRotation = new JObject();
-
-        myModel.ModelPosition.Add(new JProperty("Position", pos));
-        myModel.ModelRotation.Add(new JProperty("Rotation", rot));
+        myModel.ModelPosition = JsonConvert.SerializeObject(position, g);
+        myModel.ModelRotation = JsonConvert.SerializeObject(rotation, g);
 
         SinalRClientHelper._gameHubProxy.Invoke("CreateModel", myModel, UserManager.CurrentUser);
     }
@@ -64,9 +58,9 @@ public class ClientFunctional : Singleton<ClientFunctional>, IUserInterface
 
         VectorConverter g = new VectorConverter(true, true, true);
 
-        var position = JsonConvert.DeserializeObject<Vector3>(inModel.ModelPosition.First.First.ToString(), g);
+        var position = JsonConvert.DeserializeObject<Vector3>(inModel.ModelPosition.ToString(), g);
         g = new VectorConverter(true, true, true);
-        var rotation = JsonConvert.DeserializeObject<Vector3>(inModel.ModelRotation.First.First.ToString(), g);
+        var rotation = JsonConvert.DeserializeObject<Vector3>(inModel.ModelRotation.ToString(), g);
 
         /*
          * Модель может создаваться только в основном потоке,

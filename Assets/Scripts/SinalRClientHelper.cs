@@ -9,6 +9,7 @@ using Newtonsoft.Json.Linq;
 using UnityEngine.UI;
 using Newtonsoft.Json;
 using ModelsLibrary;
+using Newtonsoft.Json.Converters;
 using UnityEngine.Serialization;
 
 public class SinalRClientHelper : Singleton<SinalRClientHelper>
@@ -95,9 +96,11 @@ public class SinalRClientHelper : Singleton<SinalRClientHelper>
     private void UpdateSceneData(IList<JToken> obj)
     {
         var sceneObjects = JArray.Parse(obj.First().ToString());
+        VectorConverter g = new VectorConverter(false, true, false);
+
         foreach (var model in sceneObjects)
         {
-            var modelObject = JsonConvert.DeserializeObject<SyncObjectModel>(model.ToString());
+            var modelObject = JsonConvert.DeserializeObject<SyncObjectModel>(model.ToString(), g);
         }
     }
 
