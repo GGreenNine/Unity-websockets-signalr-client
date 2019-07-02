@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNet.SignalR.Client;
@@ -24,6 +25,7 @@ public class SinalRClientHelper : Singleton<SinalRClientHelper>
     private HubConnection _hubConnection = null;
     public static IHubProxy _gameHubProxy;
     public static IHubProxy _userHubProxy;
+    public static ConcurrentDictionary<string, List<dynamic>> _queueToSend = new ConcurrentDictionary<string, List<dynamic>>(); 
     string _result;
 
     public void ConnectToRoom()
@@ -31,10 +33,11 @@ public class SinalRClientHelper : Singleton<SinalRClientHelper>
         UINotifications.Instance.ShowDefaultNotification($"ConnectedToRoom");
         IsConnectedToRoom?.Invoke();
     }
-    
+
     private void Start()
     {
         ConnectToHub();
+        //IsConnectedToRoom += delegate { StartCoroutine(TransformPackageSender()); };
     }
 
     private void ConnectToHub()
@@ -50,12 +53,15 @@ public class SinalRClientHelper : Singleton<SinalRClientHelper>
             _hubConnection.StateChanged += HubConnectionOnStateChanged;
             _gameHubProxy = _hubConnection.CreateHubProxy("GameHub");
             _userHubProxy = _hubConnection.CreateHubProxy("UserHub");
+
+            Subscription sceneUpdateModelsData = _gameHubProxy.Subscribe("GameBroadcaster_UpdateMoving");
+            sceneUpdateModelsData.Received += SceneUpdateModelsDataOnReceived;
             /*
              * Connection to game hub updateModels
              */
             Subscription sceneCreateData = _gameHubProxy.Subscribe("GameBroadcaster_CreateModel");
             sceneCreateData.Received += SceneCreateData;
-            
+
             Subscription sceneDeleteData = _gameHubProxy.Subscribe("GameBroadcaster_GameBroadcaster_DeleteModel");
             sceneDeleteData.Received += SceneDeleteData;
             /*
@@ -83,7 +89,7 @@ public class SinalRClientHelper : Singleton<SinalRClientHelper>
              */
             Subscription updateScene = _gameHubProxy.Subscribe("UpdateSceneFor");
             updateScene.Received += UpdateSceneData;
-            
+
             Debug.Log(" _hubConnection.Start();");
         }
 
@@ -91,6 +97,11 @@ public class SinalRClientHelper : Singleton<SinalRClientHelper>
         _hubConnection.Start().Wait();
         if (_hubConnection.State == ConnectionState.Connected)
             Debug.Log("connected");
+    }
+
+    private void SceneUpdateModelsDataOnReceived(IList<JToken> obj)
+    {
+        
     }
 
     private void UpdateSceneData(IList<JToken> obj)
@@ -101,6 +112,7 @@ public class SinalRClientHelper : Singleton<SinalRClientHelper>
         foreach (var model in sceneObjects)
         {
             var modelObject = JsonConvert.DeserializeObject<SyncObjectModel>(model.ToString(), g);
+            ClientFunctional.Instance.CreateModelOther(modelObject);
         }
     }
 
@@ -129,7 +141,6 @@ public class SinalRClientHelper : Singleton<SinalRClientHelper>
         foreach (var model in obj)
         {
             Debug.Log(model);
-            
         }
     }
 
@@ -150,6 +161,7 @@ public class SinalRClientHelper : Singleton<SinalRClientHelper>
             UserManager.CurrentUser = user;
         }
     }
+
     /// <summary>
     /// User join room data
     /// </summary>
@@ -164,8 +176,17 @@ public class SinalRClientHelper : Singleton<SinalRClientHelper>
             UserManager.CurrentUser = user;
             ConnectToRoom();
         }
-        UINotifications.Instance.ShowDefaultNotification($"User is join the room : {user.UserName}");
+        else
+        {
+            UINotifications.Instance.ShowDefaultNotification($"User is join the room : {user.UserName}");
+            /*
+             * При подключении другого пользователя отправляем информацию о состоянии
+             * Обьектов, которыми владеем
+             */
+            ObjectsStateManager.Instance.NotifyNetworingTransforms();
+        }
     }
+
     /// <summary>
     /// User leaved room data
     /// </summary>
@@ -180,6 +201,7 @@ public class SinalRClientHelper : Singleton<SinalRClientHelper>
             UserManager.CurrentUser = user;
             IsDisconnectedFromRoom();
         }
+
         UINotifications.Instance.ShowDefaultNotification($"User has leaved the room : {user.UserName}");
     }
 
@@ -195,6 +217,7 @@ public class SinalRClientHelper : Singleton<SinalRClientHelper>
             UINotifications.Instance.ShowDefaultNotification("Authorization failed");
             return;
         }
+
         UserManager.CurrentUser = user;
         UINotifications.Instance.ShowDefaultNotification("You are authorized!");
     }
@@ -216,24 +239,26 @@ public class SinalRClientHelper : Singleton<SinalRClientHelper>
     /// </summary>
     void OnApplicationQuit()
     {
-        Debug.Log("OnApplicationQuit() " + Time.time + " seconds");
+        ClientFunctional.Instance.Disable();
         _hubConnection.Error -= hubConnection_Error;
-        _hubConnection.Stop();
+        _hubConnection.Dispose();
     }
-
+    /// <summary>
+    /// Create model message processing
+    /// </summary>
+    /// <param name="obj"></param>
     private void SceneCreateData(IList<JToken> obj)
     {
         SyncObjectModel modelToCreate = JsonConvert.DeserializeObject<SyncObjectModel>(obj.First().ToString());
-        var myID = UserManager.CurrentUser.connectionId;
-        
-        if(myID == modelToCreate.UserModel.connectionId)
-            return;
-        
+
         ClientFunctional.Instance.CreateModelOther(modelToCreate);
         UINotifications.Instance.ShowDefaultNotification($"Creating new object {modelToCreate.PrefabName}");
-
     }
     
+    /// <summary>
+    /// Delete model message processing
+    /// </summary>
+    /// <param name="obj"></param>
     private void SceneDeleteData(IList<JToken> obj)
     {
         SyncObjectModel modelToCreate = JsonConvert.DeserializeObject<SyncObjectModel>(obj.First().ToString());
@@ -242,11 +267,27 @@ public class SinalRClientHelper : Singleton<SinalRClientHelper>
             UINotifications.Instance.ShowDefaultNotification("Deleting object failed");
             return;
         }
+
         NetWorkingTransform matchModel;
         ObjectsStateManager.Instance.modelsLoadedFromServerDictionary.TryGetValue(modelToCreate.ModelId,
             out matchModel);
-        if(matchModel!=null)
+        if (matchModel != null)
             matchModel.DisableMe(out matchModel);
     }
     
+    /// <summary>
+    /// Sending data packages to the server
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator TransformPackageSender()
+    {
+        yield return new WaitForSeconds(0.02f);
+        foreach (var package in _queueToSend)
+        {
+            _gameHubProxy.Invoke(package.Key, package.Value);
+        }
+        _queueToSend.Clear();
+        StartCoroutine(TransformPackageSender());
+    }
+
 }

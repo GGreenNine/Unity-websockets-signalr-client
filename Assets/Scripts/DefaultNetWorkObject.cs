@@ -1,21 +1,20 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using ModelsLibrary;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using UnityEngine;
 
-public class DefaultNetWorkObject : MovingNetworkTransform
+public class DefaultNetWorkObject : NetWorkingTransform
 {
-    public DefaultNetWorkObject(string creatorAuthority, string modelAuthority) : base(creatorAuthority, modelAuthority)
+    public override void NotifyOtherClientsSyncObjectData()
     {
+        SinalRClientHelper._gameHubProxy.Invoke("CreateModel", GetModelInfo());
+        SinalRClientHelper._queueToSend.TryAdd("CreateModel", new List<dynamic>() {GetModelInfo()});
     }
 
     public override void Initialize()
     {
-        throw new System.NotImplementedException();
-    }
-
-    public override SyncObjectModel GetModelInfo()
-    {
-        throw new System.NotImplementedException();
     }
 }

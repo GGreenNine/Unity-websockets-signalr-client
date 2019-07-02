@@ -27,13 +27,11 @@ public class ClientFunctional : Singleton<ClientFunctional>, IUserInterface
     public void CreateModel(Vector3 position, Vector3 rotation, string prefabName)
     {
         var myModelPrefab = Instantiate(Resources.Load(prefabName), position,
-            new Quaternion(rotation.x, rotation.y, rotation.z, 1));
+            new Quaternion(rotation.x, rotation.y, rotation.z, 1)) as GameObject;
         var myModel = new SyncObjectModel
         {
             PrefabName = prefabName,
             ModelId = Guid.NewGuid().ToString(),
-            //PlayerId = UserManager.CurrentUser.PlayerId,
-            //RoomModelId = UserManager.CurrentUser.RoomModelId
         };
 
         VectorConverter g = new VectorConverter(false, true, false);
@@ -42,6 +40,11 @@ public class ClientFunctional : Singleton<ClientFunctional>, IUserInterface
         myModel.ModelRotation = JsonConvert.SerializeObject(rotation, g);
 
         SinalRClientHelper._gameHubProxy.Invoke("CreateModel", myModel, UserManager.CurrentUser);
+        /*
+         * Добавляем созданную модель в локальное хранилище обьектов
+         */
+        ObjectsStateManager.Instance.myModelsDictionartLocal.TryAdd(myModel.ModelId.ToString(),
+            myModelPrefab.GetComponent<NetWorkingTransform>());
     }
 
     /// <summary>
@@ -50,6 +53,13 @@ public class ClientFunctional : Singleton<ClientFunctional>, IUserInterface
     /// <param name="inModel"></param>
     public void CreateModelOther(SyncObjectModel inModel)
     {
+        if (UserManager.CurrentUser.connectionId == inModel.UserModel.connectionId)
+        {
+            NetWorkingTransform transform;
+            ObjectsStateManager.Instance.myModelsDictionartLocal.TryGetValue(inModel.ModelId.ToString(), out transform);
+            ObjectsStateManager.Instance.myModelsDictionary.Enqueue(transform);
+        }
+        
         /*
          * Проверяем, есть ли данная модель на сцене
          * Если есть, не создаем повторную и выходим из тела метода
@@ -58,9 +68,9 @@ public class ClientFunctional : Singleton<ClientFunctional>, IUserInterface
 
         VectorConverter g = new VectorConverter(true, true, true);
 
-        var position = JsonConvert.DeserializeObject<Vector3>(inModel.ModelPosition.ToString(), g);
+        var position = JsonConvert.DeserializeObject<Vector3>(inModel.ModelPosition, g);
         g = new VectorConverter(true, true, true);
-        var rotation = JsonConvert.DeserializeObject<Vector3>(inModel.ModelRotation.ToString(), g);
+        var rotation = JsonConvert.DeserializeObject<Vector3>(inModel.ModelRotation, g);
 
         /*
          * Модель может создаваться только в основном потоке,
@@ -71,7 +81,7 @@ public class ClientFunctional : Singleton<ClientFunctional>, IUserInterface
             var otherModelPrefab = Instantiate(Resources.Load(inModel.PrefabName), position,
                 new Quaternion(rotation.x, rotation.y, rotation.z, 1)) as GameObject;
             var netWorkingTransform = otherModelPrefab.GetComponent<NetWorkingTransform>();
-            netWorkingTransform.syncObjectModel = inModel;
+            netWorkingTransform.SyncObjectModel = inModel;
             ObjectsStateManager.Instance.modelsLoadedFromServerDictionary.TryAdd(inModel.ModelId, netWorkingTransform);
         });
     }
@@ -93,7 +103,7 @@ public class ClientFunctional : Singleton<ClientFunctional>, IUserInterface
 
     public void Disable()
     {
-        throw new NotImplementedException();
+        DisconnectFromRoom();
     }
 
     public void UpdateUser()

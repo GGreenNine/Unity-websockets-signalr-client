@@ -1,47 +1,69 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using ModelsLibrary;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using UnityEngine;
-
-public abstract class MovingNetworkTransform : NetWorkingTransform
-{
-    protected MovingNetworkTransform(string creatorAuthority, string modelAuthority) : base(creatorAuthority,
-        modelAuthority)
-    {
-    }
-}
 
 public abstract class NetWorkingTransform : MonoBehaviour
 {
-    public SyncObjectModel syncObjectModel;
+    private SyncObjectModel syncObjectModel;
+    public SyncObjectModel SyncObjectModel
+    {
+        
+        get => syncObjectModel;
+        set
+        {
+            VectorConverter g = new VectorConverter(true, true, true);
+            syncObjectModel = value;
+            CreatorAuthority = value.UserName;
+            ModelAuthority = value.ModelId;
+            newPosition = JsonConvert.DeserializeObject<Vector3>(value.ModelPosition, g);
+            newRotation = JsonConvert.DeserializeObject<Vector3>(value.ModelRotation, g);
+        } 
+    }
+    
     public string CreatorAuthority;
     public string ModelAuthority;
-
-    protected NetWorkingTransform(string creatorAuthority, string modelAuthority)
-    {
-        CreatorAuthority = creatorAuthority;
-        ModelAuthority = modelAuthority;
-    }
-
+    public string PrefabName;
+    
     public Vector3 newPosition;
     public Vector3 newRotation;
 
     public void UpdateMoving()
     {
-        if (CreatorAuthority == UserManager.CurrentUser.connectionId || CreatorAuthority == null) return;
-        if (newPosition != null && newPosition != transform.position ||
-            newRotation != null && newRotation != transform.rotation.eulerAngles)
+        if (CreatorAuthority == UserManager.CurrentUser.UserName || CreatorAuthority == null) return;
+        if (newPosition != transform.position ||
+            newRotation != transform.rotation.eulerAngles)
         {
-//            transform.position = Vector3.MoveTowards(transform.position, OldState.pos, OldState.distance);
-//            var newRotation = new Quaternion(OldState.rot.x, OldState.rot.y, OldState.rot.z, OldState.rot.w);
-//            transform.rotation = Quaternion.Slerp(transform.rotation, newRotation, 0.1f);
+            transform.position = Vector3.MoveTowards(transform.position, newPosition, SyncObjectModel.Distance);
+            var newRotation = new Quaternion(this.newRotation.x, this.newRotation.y, this.newRotation.z, 1);
+            transform.rotation = Quaternion.Slerp(transform.rotation, newRotation, 0.1f);
         }
     }
 
+    public abstract void NotifyOtherClientsSyncObjectData();    
 
     public abstract void Initialize();
 
-    public abstract SyncObjectModel GetModelInfo();
+    public virtual SyncObjectModel GetModelInfo()
+    {
+        VectorConverter g = new VectorConverter(false, true, false);
+
+        return new SyncObjectModel()
+        {
+            Distance = 0,
+            ModelId = ModelAuthority,
+            ModelPosition = JsonConvert.SerializeObject(transform.position, g),
+            ModelRotation = JsonConvert.SerializeObject(transform.rotation, g),
+            UserName = CreatorAuthority,
+            PrefabName = PrefabName,
+            RoomModelId = SyncObjectModel.RoomModelId,
+            Rooms = SyncObjectModel.Rooms,
+            Rotation = 0,
+            UserModel = SyncObjectModel.UserModel
+        };
+    }
 
     public void DisableMe(out NetWorkingTransform disabledOut)
     {
