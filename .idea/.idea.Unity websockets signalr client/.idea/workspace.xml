@@ -25,18 +25,18 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Assets/Scripts/MovingNetworkTransform.cs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="480">
-              <caret line="35" column="48" lean-forward="true" selection-start-line="35" selection-start-column="48" selection-end-line="35" selection-end-column="48" />
+            <state relative-caret-position="290">
+              <caret line="51" lean-forward="true" selection-start-line="51" selection-end-line="51" />
               <folding>
-                <marker date="1562053675057" expanded="false" signature="6:156" ph="..." />
-                <marker date="1562053675057" expanded="true" signature="215:2659" ph="{...}" />
-                <marker date="1562053675057" expanded="true" signature="305:770" ph="{...}" />
-                <marker date="1562053675057" expanded="true" signature="364:763" ph="{...}" />
-                <marker date="1562053675057" expanded="true" signature="976:1530" ph="{...}" />
-                <marker date="1562053675057" expanded="true" signature="1192:1524" ph="{...}" />
-                <marker date="1562053675057" expanded="true" signature="1687:2303" ph="{...}" />
-                <marker date="1562053675057" expanded="true" signature="1809:2296" ph="{...}" />
-                <marker date="1562053675057" expanded="true" signature="2367:2657" ph="{...}" />
+                <marker date="1562064066097" expanded="false" signature="6:156" ph="..." />
+                <marker date="1562064066097" expanded="true" signature="215:2667" ph="{...}" />
+                <marker date="1562064066097" expanded="true" signature="305:770" ph="{...}" />
+                <marker date="1562064066097" expanded="true" signature="364:763" ph="{...}" />
+                <marker date="1562064066097" expanded="true" signature="976:1530" ph="{...}" />
+                <marker date="1562064066097" expanded="true" signature="1192:1524" ph="{...}" />
+                <marker date="1562064066097" expanded="true" signature="1687:2311" ph="{...}" />
+                <marker date="1562064066097" expanded="true" signature="1809:2304" ph="{...}" />
+                <marker date="1562064066097" expanded="true" signature="2375:2665" ph="{...}" />
               </folding>
             </state>
           </provider>
@@ -135,28 +135,28 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Assets/Scripts/ClientFunctional.cs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="274">
-              <caret line="33" column="48" lean-forward="true" selection-start-line="33" selection-start-column="48" selection-end-line="33" selection-end-column="48" />
+            <state relative-caret-position="386">
+              <caret line="42" column="56" lean-forward="true" selection-start-line="42" selection-start-column="56" selection-end-line="42" selection-end-column="56" />
               <folding>
-                <marker date="1562053780311" expanded="false" signature="6:228" ph="..." />
-                <marker date="1562053780311" expanded="true" signature="305:4383" ph="{...}" />
-                <marker date="1562053780311" expanded="true" signature="342:735" ph="{...}" />
-                <marker date="1562053780311" expanded="true" signature="774:850" ph="{...}" />
-                <marker date="1562053780311" expanded="true" signature="934:1825" ph="{...}" />
-                <marker date="1562053780311" expanded="true" signature="1151:1248" ph="{...}" />
-                <marker date="1562053780311" expanded="true" signature="1576:1659" ph="/* Добавляем созданную модель в локальное хранилище обьектов ... */" />
-                <marker date="1562053780311" expanded="true" signature="1831:1932" ph="/// Создание чужой модели ... " />
-                <marker date="1562053780311" expanded="true" signature="1990:3596" ph="{...}" />
-                <marker date="1562053780311" expanded="true" signature="2080:2344" ph="{...}" />
-                <marker date="1562053780311" expanded="true" signature="2362:2497" ph="/* Проверяем, есть ли данная модель на сцене ... */" />
-                <marker date="1562053780311" expanded="true" signature="2917:3056" ph="/* Модель может создаваться только в основном потоке, ... */" />
-                <marker date="1562053780311" expanded="true" signature="3622:3652" ph="{...}" />
-                <marker date="1562053780311" expanded="true" signature="3683:3784" ph="{...}" />
-                <marker date="1562053780311" expanded="true" signature="3810:3892" ph="{...}" />
-                <marker date="1562053780311" expanded="true" signature="3919:3961" ph="{...}" />
-                <marker date="1562053780311" expanded="true" signature="3991:4048" ph="{...}" />
-                <marker date="1562053780311" expanded="true" signature="4081:4179" ph="{...}" />
-                <marker date="1562053780311" expanded="true" signature="4217:4381" ph="{...}" />
+                <marker date="1562066239937" expanded="false" signature="6:228" ph="..." />
+                <marker date="1562066239937" expanded="true" signature="305:4562" ph="{...}" />
+                <marker date="1562066239937" expanded="true" signature="342:735" ph="{...}" />
+                <marker date="1562066239937" expanded="true" signature="774:850" ph="{...}" />
+                <marker date="1562066239937" expanded="true" signature="934:2004" ph="{...}" />
+                <marker date="1562066239937" expanded="true" signature="1151:1248" ph="{...}" />
+                <marker date="1562066239937" expanded="true" signature="1755:1838" ph="/* Добавляем созданную модель в локальное хранилище обьектов ... */" />
+                <marker date="1562066239937" expanded="true" signature="2010:2111" ph="/// Создание чужой модели ... " />
+                <marker date="1562066239937" expanded="true" signature="2169:3775" ph="{...}" />
+                <marker date="1562066239937" expanded="true" signature="2259:2523" ph="{...}" />
+                <marker date="1562066239937" expanded="true" signature="2541:2676" ph="/* Проверяем, есть ли данная модель на сцене ... */" />
+                <marker date="1562066239937" expanded="true" signature="3096:3235" ph="/* Модель может создаваться только в основном потоке, ... */" />
+                <marker date="1562066239937" expanded="true" signature="3801:3831" ph="{...}" />
+                <marker date="1562066239937" expanded="true" signature="3862:3963" ph="{...}" />
+                <marker date="1562066239937" expanded="true" signature="3989:4071" ph="{...}" />
+                <marker date="1562066239937" expanded="true" signature="4098:4140" ph="{...}" />
+                <marker date="1562066239937" expanded="true" signature="4170:4227" ph="{...}" />
+                <marker date="1562066239937" expanded="true" signature="4260:4358" ph="{...}" />
+                <marker date="1562066239937" expanded="true" signature="4396:4560" ph="{...}" />
               </folding>
             </state>
           </provider>
@@ -339,12 +339,12 @@
       <workItem from="1561695650337" duration="26080000" />
       <workItem from="1561964551031" duration="4348000" />
       <workItem from="1561984646125" duration="1539000" />
-      <workItem from="1562042326076" duration="10154000" />
+      <workItem from="1562042326076" duration="12877000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="52225000" />
+    <option name="totallyTimeSpent" value="54948000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1098,46 +1098,46 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Assets/Scripts/MovingNetworkTransform.cs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="480">
-          <caret line="35" column="48" lean-forward="true" selection-start-line="35" selection-start-column="48" selection-end-line="35" selection-end-column="48" />
+        <state relative-caret-position="290">
+          <caret line="51" lean-forward="true" selection-start-line="51" selection-end-line="51" />
           <folding>
-            <marker date="1562053675057" expanded="false" signature="6:156" ph="..." />
-            <marker date="1562053675057" expanded="true" signature="215:2659" ph="{...}" />
-            <marker date="1562053675057" expanded="true" signature="305:770" ph="{...}" />
-            <marker date="1562053675057" expanded="true" signature="364:763" ph="{...}" />
-            <marker date="1562053675057" expanded="true" signature="976:1530" ph="{...}" />
-            <marker date="1562053675057" expanded="true" signature="1192:1524" ph="{...}" />
-            <marker date="1562053675057" expanded="true" signature="1687:2303" ph="{...}" />
-            <marker date="1562053675057" expanded="true" signature="1809:2296" ph="{...}" />
-            <marker date="1562053675057" expanded="true" signature="2367:2657" ph="{...}" />
+            <marker date="1562064066097" expanded="false" signature="6:156" ph="..." />
+            <marker date="1562064066097" expanded="true" signature="215:2667" ph="{...}" />
+            <marker date="1562064066097" expanded="true" signature="305:770" ph="{...}" />
+            <marker date="1562064066097" expanded="true" signature="364:763" ph="{...}" />
+            <marker date="1562064066097" expanded="true" signature="976:1530" ph="{...}" />
+            <marker date="1562064066097" expanded="true" signature="1192:1524" ph="{...}" />
+            <marker date="1562064066097" expanded="true" signature="1687:2311" ph="{...}" />
+            <marker date="1562064066097" expanded="true" signature="1809:2304" ph="{...}" />
+            <marker date="1562064066097" expanded="true" signature="2375:2665" ph="{...}" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Assets/Scripts/ClientFunctional.cs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="274">
-          <caret line="33" column="48" lean-forward="true" selection-start-line="33" selection-start-column="48" selection-end-line="33" selection-end-column="48" />
+        <state relative-caret-position="386">
+          <caret line="42" column="56" lean-forward="true" selection-start-line="42" selection-start-column="56" selection-end-line="42" selection-end-column="56" />
           <folding>
-            <marker date="1562053780311" expanded="false" signature="6:228" ph="..." />
-            <marker date="1562053780311" expanded="true" signature="305:4383" ph="{...}" />
-            <marker date="1562053780311" expanded="true" signature="342:735" ph="{...}" />
-            <marker date="1562053780311" expanded="true" signature="774:850" ph="{...}" />
-            <marker date="1562053780311" expanded="true" signature="934:1825" ph="{...}" />
-            <marker date="1562053780311" expanded="true" signature="1151:1248" ph="{...}" />
-            <marker date="1562053780311" expanded="true" signature="1576:1659" ph="/* Добавляем созданную модель в локальное хранилище обьектов ... */" />
-            <marker date="1562053780311" expanded="true" signature="1831:1932" ph="/// Создание чужой модели ... " />
-            <marker date="1562053780311" expanded="true" signature="1990:3596" ph="{...}" />
-            <marker date="1562053780311" expanded="true" signature="2080:2344" ph="{...}" />
-            <marker date="1562053780311" expanded="true" signature="2362:2497" ph="/* Проверяем, есть ли данная модель на сцене ... */" />
-            <marker date="1562053780311" expanded="true" signature="2917:3056" ph="/* Модель может создаваться только в основном потоке, ... */" />
-            <marker date="1562053780311" expanded="true" signature="3622:3652" ph="{...}" />
-            <marker date="1562053780311" expanded="true" signature="3683:3784" ph="{...}" />
-            <marker date="1562053780311" expanded="true" signature="3810:3892" ph="{...}" />
-            <marker date="1562053780311" expanded="true" signature="3919:3961" ph="{...}" />
-            <marker date="1562053780311" expanded="true" signature="3991:4048" ph="{...}" />
-            <marker date="1562053780311" expanded="true" signature="4081:4179" ph="{...}" />
-            <marker date="1562053780311" expanded="true" signature="4217:4381" ph="{...}" />
+            <marker date="1562066239937" expanded="false" signature="6:228" ph="..." />
+            <marker date="1562066239937" expanded="true" signature="305:4562" ph="{...}" />
+            <marker date="1562066239937" expanded="true" signature="342:735" ph="{...}" />
+            <marker date="1562066239937" expanded="true" signature="774:850" ph="{...}" />
+            <marker date="1562066239937" expanded="true" signature="934:2004" ph="{...}" />
+            <marker date="1562066239937" expanded="true" signature="1151:1248" ph="{...}" />
+            <marker date="1562066239937" expanded="true" signature="1755:1838" ph="/* Добавляем созданную модель в локальное хранилище обьектов ... */" />
+            <marker date="1562066239937" expanded="true" signature="2010:2111" ph="/// Создание чужой модели ... " />
+            <marker date="1562066239937" expanded="true" signature="2169:3775" ph="{...}" />
+            <marker date="1562066239937" expanded="true" signature="2259:2523" ph="{...}" />
+            <marker date="1562066239937" expanded="true" signature="2541:2676" ph="/* Проверяем, есть ли данная модель на сцене ... */" />
+            <marker date="1562066239937" expanded="true" signature="3096:3235" ph="/* Модель может создаваться только в основном потоке, ... */" />
+            <marker date="1562066239937" expanded="true" signature="3801:3831" ph="{...}" />
+            <marker date="1562066239937" expanded="true" signature="3862:3963" ph="{...}" />
+            <marker date="1562066239937" expanded="true" signature="3989:4071" ph="{...}" />
+            <marker date="1562066239937" expanded="true" signature="4098:4140" ph="{...}" />
+            <marker date="1562066239937" expanded="true" signature="4170:4227" ph="{...}" />
+            <marker date="1562066239937" expanded="true" signature="4260:4358" ph="{...}" />
+            <marker date="1562066239937" expanded="true" signature="4396:4560" ph="{...}" />
           </folding>
         </state>
       </provider>

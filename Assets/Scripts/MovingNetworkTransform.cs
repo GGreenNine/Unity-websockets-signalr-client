@@ -59,7 +59,7 @@ public abstract class NetWorkingTransform : MonoBehaviour
             UserName = CreatorAuthority,
             PrefabName = PrefabName,
             RoomModelId = SyncObjectModel.RoomModelId,
-            Rooms = SyncObjectModel.Rooms,
+            RoomModel = SyncObjectModel.RoomModel,
             Rotation = 0,
             UserModel = SyncObjectModel.UserModel
         };

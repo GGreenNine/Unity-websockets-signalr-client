@@ -38,8 +38,12 @@ public class ClientFunctional : Singleton<ClientFunctional>, IUserInterface
 
         myModel.ModelPosition = JsonConvert.SerializeObject(position, g);
         myModel.ModelRotation = JsonConvert.SerializeObject(rotation, g);
+        myModel.UserName = UserManager.CurrentUser.UserName;
+        
+        if (UserManager.CurrentUser.RoomModelId != null)
+            myModel.RoomModelId = (int) UserManager.CurrentUser.RoomModelId;
 
-        SinalRClientHelper._gameHubProxy.Invoke("CreateModel", myModel, UserManager.CurrentUser);
+        SinalRClientHelper._gameHubProxy.Invoke("CreateModel", myModel);
         /*
          * Добавляем созданную модель в локальное хранилище обьектов
          */
