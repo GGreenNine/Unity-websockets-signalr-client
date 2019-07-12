@@ -6,6 +6,7 @@ using ModelsLibrary;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Serialization;
 using Random = System.Random;
 
 public class ClientFunctional : Singleton<ClientFunctional>, IUserInterface
@@ -16,7 +17,7 @@ public class ClientFunctional : Singleton<ClientFunctional>, IUserInterface
             UnityEngine.Random.Range(0f, 10f));
         var randomRotation = new Vector3(UnityEngine.Random.Range(0f, 10f), UnityEngine.Random.Range(0f, 10f),
             UnityEngine.Random.Range(0f, 10f));
-        CreateModel(randomPlace, randomRotation, "PlayerPrefab");
+        CreateModel(randomPlace, randomRotation, "MovingPrefab");
     }
 
     public void GeneratePlayerModel()
@@ -26,29 +27,35 @@ public class ClientFunctional : Singleton<ClientFunctional>, IUserInterface
 
     public void CreateModel(Vector3 position, Vector3 rotation, string prefabName)
     {
+        var g = new VectorConverter(false, true, false);
+
         var myModelPrefab = Instantiate(Resources.Load(prefabName), position,
             new Quaternion(rotation.x, rotation.y, rotation.z, 1)) as GameObject;
-        var myModel = new SyncObjectModel
-        {
-            PrefabName = prefabName,
-            ModelId = Guid.NewGuid().ToString(),
-        };
-
-        VectorConverter g = new VectorConverter(false, true, false);
-
-        myModel.ModelPosition = JsonConvert.SerializeObject(position, g);
-        myModel.ModelRotation = JsonConvert.SerializeObject(rotation, g);
-        myModel.UserName = UserManager.CurrentUser.UserName;
         
-        if (UserManager.CurrentUser.RoomModelId != null)
-            myModel.RoomModelId = (int) UserManager.CurrentUser.RoomModelId;
+        if (UserManager.CurrentUser.RoomModelId == null || myModelPrefab == null) return;
 
-        SinalRClientHelper._gameHubProxy.Invoke("CreateModel", myModel);
+        var netWorkingTransform = myModelPrefab.GetComponent<NetWorkingTransform>();
+        var syncObjModel = netWorkingTransform.GetModelInfo();
+        syncObjModel.PrefabName = prefabName;
+        syncObjModel.ModelPosition = JsonConvert.SerializeObject(position, g);
+        syncObjModel.ModelRotation = JsonConvert.SerializeObject(rotation, g);
+        syncObjModel.ModelId = Guid.NewGuid().ToString();
+        netWorkingTransform.SyncObjectModel = syncObjModel;
+        
+        Debug.Log($"Model id {syncObjModel.ModelId}");
+        
+        SinalRClientHelper._gameHubProxy.Invoke("CreateModel", syncObjModel);
         /*
          * Добавляем созданную модель в локальное хранилище обьектов
          */
-        ObjectsStateManager.Instance.myModelsDictionartLocal.TryAdd(myModel.ModelId.ToString(),
-            myModelPrefab.GetComponent<NetWorkingTransform>());
+        ObjectsStateManager.Instance.myModelsDictionartLocal.TryAdd(syncObjModel.ModelId,
+            netWorkingTransform);
+
+        if (netWorkingTransform is IMovingNetworkObject movingNetwork)
+        {
+            movingNetwork.Initialize();
+        }
+        
     }
 
     /// <summary>
@@ -59,11 +66,15 @@ public class ClientFunctional : Singleton<ClientFunctional>, IUserInterface
     {
         if (UserManager.CurrentUser.connectionId == inModel.UserModel.connectionId)
         {
-            NetWorkingTransform transform;
-            ObjectsStateManager.Instance.myModelsDictionartLocal.TryGetValue(inModel.ModelId.ToString(), out transform);
-            ObjectsStateManager.Instance.myModelsDictionary.Enqueue(transform);
+            ObjectsStateManager.Instance.myModelsDictionartLocal.TryGetValue(inModel.ModelId,
+                out var transform);
+            if (transform != null)
+                ObjectsStateManager.Instance.myModelsDictionary.Enqueue(transform);
+            else
+                Debug.Log("Object you want to instantiate does not exist in current scene");
+            return;
         }
-        
+
         /*
          * Проверяем, есть ли данная модель на сцене
          * Если есть, не создаем повторную и выходим из тела метода

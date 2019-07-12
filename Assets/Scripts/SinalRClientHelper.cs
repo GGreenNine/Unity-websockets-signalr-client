@@ -25,13 +25,17 @@ public class SinalRClientHelper : Singleton<SinalRClientHelper>
     private HubConnection _hubConnection = null;
     public static IHubProxy _gameHubProxy;
     public static IHubProxy _userHubProxy;
-    public static ConcurrentDictionary<string, List<dynamic>> _queueToSend = new ConcurrentDictionary<string, List<dynamic>>(); 
+
+    public static ConcurrentDictionary<string, List<object>> _queueToSend =
+        new ConcurrentDictionary<string, List<object>>();
+
     string _result;
 
     public void ConnectToRoom()
     {
         UINotifications.Instance.ShowDefaultNotification($"ConnectedToRoom");
         IsConnectedToRoom?.Invoke();
+        UnityMainThreadDispatcher.Instance().Enqueue(delegate { StartCoroutine(TransformPackageSender()); });
     }
 
     private void Start()
@@ -101,7 +105,23 @@ public class SinalRClientHelper : Singleton<SinalRClientHelper>
 
     private void SceneUpdateModelsDataOnReceived(IList<JToken> obj)
     {
-        
+        var g = new VectorConverter(false, true, false);
+
+        SyncObjectModel modelToCreate = JsonConvert.DeserializeObject<SyncObjectModel>(obj.First().ToString());
+        if (modelToCreate == null)
+            return;
+        try
+        {
+            ObjectsStateManager.Instance.modelsLoadedFromServerDictionary.TryGetValue(modelToCreate.ModelId,
+                out var model);
+            model.newPosition = JsonConvert.DeserializeObject<Vector3>(modelToCreate.ModelPosition, g);
+            model.newRotation = JsonConvert.DeserializeObject<Vector3>(modelToCreate.ModelRotation, g);
+            model.SyncObjectModel.Distance = modelToCreate.Distance;
+        }
+        catch (Exception e)
+        {
+            Debug.Log(e.Message);
+        }
     }
 
     private void UpdateSceneData(IList<JToken> obj)
@@ -175,6 +195,7 @@ public class SinalRClientHelper : Singleton<SinalRClientHelper>
         {
             UserManager.CurrentUser = user;
             ConnectToRoom();
+            UINotifications.Instance.ShowDefaultNotification($"You are joined the room");
         }
         else
         {
@@ -243,6 +264,7 @@ public class SinalRClientHelper : Singleton<SinalRClientHelper>
         _hubConnection.Error -= hubConnection_Error;
         _hubConnection.Dispose();
     }
+
     /// <summary>
     /// Create model message processing
     /// </summary>
@@ -254,7 +276,7 @@ public class SinalRClientHelper : Singleton<SinalRClientHelper>
         ClientFunctional.Instance.CreateModelOther(modelToCreate);
         UINotifications.Instance.ShowDefaultNotification($"Creating new object {modelToCreate.PrefabName}");
     }
-    
+
     /// <summary>
     /// Delete model message processing
     /// </summary>
@@ -274,7 +296,7 @@ public class SinalRClientHelper : Singleton<SinalRClientHelper>
         if (matchModel != null)
             matchModel.DisableMe(out matchModel);
     }
-    
+
     /// <summary>
     /// Sending data packages to the server
     /// </summary>
@@ -282,12 +304,16 @@ public class SinalRClientHelper : Singleton<SinalRClientHelper>
     private IEnumerator TransformPackageSender()
     {
         yield return new WaitForSeconds(0.02f);
+        Debug.Log("TransformPachage sdanpodnjapo");
         foreach (var package in _queueToSend)
         {
-            _gameHubProxy.Invoke(package.Key, package.Value);
+            foreach (var value in package.Value)
+            {
+                _gameHubProxy.Invoke(package.Key, value);
+            }
         }
+
         _queueToSend.Clear();
         StartCoroutine(TransformPackageSender());
     }
-
 }

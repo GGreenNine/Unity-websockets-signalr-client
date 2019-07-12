@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ContentModelStore">
-    <e p="C:\Users\vr\.Rider2018.3\config\consoles\ide" t="IncludeRecursive" />
-    <e p="C:\Users\vr\.Rider2018.3\system\extResources" t="IncludeRecursive" />
-    <e p="C:\Users\vr\.Rider2018.3\system\resharper-host\local\Transient\ReSharperHost\v183\SolutionCaches\_Unity websockets signalr client.-805691936.00" t="ExcludeRecursive" />
+    <e p="C:\Users\vr\.Rider2019.1\config\consoles\ide" t="IncludeRecursive" />
+    <e p="C:\Users\vr\.Rider2019.1\system\extResources" t="IncludeRecursive" />
+    <e p="C:\Users\vr\.Rider2019.1\system\resharper-host\local\Transient\ReSharperHost\v191\SolutionCaches\_Unity websockets signalr client.-805691936.00" t="ExcludeRecursive" />
     <e p="D:\Test projects\NetWork test 2\Unity websockets signalr client" t="IncludeRecursive">
       <e p="Assembly-CSharp-firstpass.csproj" t="IncludeRecursive" />
       <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
@@ -57,9 +57,11 @@
           <e p="DefaultNetWorkObject.cs" t="Include" />
           <e p="GameServerFunctional.cs" t="Include" />
           <e p="IUserInterface.cs" t="Include" />
-          <e p="MovingNetworkTransform.cs" t="Include" />
+          <e p="MovingTransform.cs" t="Include" />
+          <e p="NetWorkingTransform.cs" t="Include" />
           <e p="NetworkManager.cs" t="Include" />
           <e p="ObjectsStateManager.cs" t="Include" />
+          <e p="PertainTransform.cs" t="Include" />
           <e p="SinalRClientHelper.cs" t="Include" />
           <e p="Singleton.cs" t="Include" />
           <e p="UIManager.cs" t="Include" />
@@ -94,7 +96,6 @@
           </e>
         </e>
       </e>
-      <e p="Library" t="ExcludeRecursive" />
       <e p="obj" t="ExcludeRecursive" />
       <e p="packages" t="ExcludeRecursive" />
       <e p="Temp\bin" t="ExcludeRecursive" />

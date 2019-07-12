@@ -78,9 +78,11 @@
     <Compile Include="Assets\Scripts\DefaultNetWorkObject.cs" />
     <Compile Include="Assets\Scripts\GameServerFunctional.cs" />
     <Compile Include="Assets\Scripts\IUserInterface.cs" />
-    <Compile Include="Assets\Scripts\MovingNetworkTransform.cs" />
+    <Compile Include="Assets\Scripts\MovingTransform.cs" />
+    <Compile Include="Assets\Scripts\NetWorkingTransform.cs" />
     <Compile Include="Assets\Scripts\NetworkManager.cs" />
     <Compile Include="Assets\Scripts\ObjectsStateManager.cs" />
+    <Compile Include="Assets\Scripts\PertainTransform.cs" />
     <Compile Include="Assets\Scripts\SinalRClientHelper.cs" />
     <Compile Include="Assets\Scripts\Singleton.cs" />
     <Compile Include="Assets\Scripts\UIManager.cs" />

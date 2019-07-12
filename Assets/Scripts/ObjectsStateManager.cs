@@ -30,7 +30,7 @@ public class ObjectsStateManager : Singleton<ObjectsStateManager>
     {
         NetWorkingTransform value;
         modelsLoadedFromServerDictionary.TryGetValue(model.ModelId, out value);
-        value?.UpdateMoving();
+        //value?.UpdateMoving();
         
     }
 }

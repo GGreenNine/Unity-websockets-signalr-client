@@ -8,13 +8,5 @@ using UnityEngine;
 
 public class DefaultNetWorkObject : NetWorkingTransform
 {
-    public override void NotifyOtherClientsSyncObjectData()
-    {
-        SinalRClientHelper._gameHubProxy.Invoke("CreateModel", GetModelInfo());
-        SinalRClientHelper._queueToSend.TryAdd("CreateModel", new List<dynamic>() {GetModelInfo()});
-    }
 
-    public override void Initialize()
-    {
-    }
 }
